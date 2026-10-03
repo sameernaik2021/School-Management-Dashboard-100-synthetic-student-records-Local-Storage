@@ -1,0 +1,2960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Management System</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #f4f6f9;
+    color: #1f2937;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 230px;
+    height: 100vh;
+    background: #172554;
+    color: white;
+    padding-top: 20px;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    padding: 0 20px 30px;
+}
+
+.nav-item {
+    padding: 14px 20px;
+    cursor: pointer;
+    color: #dbeafe;
+    transition: 0.2s;
+    user-select: none;
+}
+
+.nav-item:hover {
+    background: #1e40af;
+    color: white;
+}
+
+.nav-item.active {
+    background: #2563eb;
+    color: white;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main {
+    margin-left: 230px;
+    padding: 25px;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 20px;
+}
+
+.header h1 {
+    font-size: 26px;
+}
+
+.header p {
+    color: #6b7280;
+    margin-top: 5px;
+}
+
+.storage-status {
+    background: #dcfce7;
+    color: #166534;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* =========================
+   PAGE SECTIONS
+========================= */
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+/* =========================
+   DASHBOARD CARDS
+========================= */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.card-title {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.card-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #172554;
+}
+
+.card-icon {
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.page-header {
+    margin-bottom: 20px;
+}
+
+.page-header h2 {
+    color: #172554;
+    margin-bottom: 5px;
+}
+
+.page-header p {
+    color: #6b7280;
+}
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar {
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+input,
+select,
+button {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+input {
+    flex: 1;
+    min-width: 220px;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+.secondary {
+    background: #64748b;
+}
+
+.secondary:hover {
+    background: #475569;
+}
+
+.danger {
+    background: #dc2626;
+}
+
+.danger:hover {
+    background: #b91c1c;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-container {
+    background: white;
+    border-radius: 10px;
+    overflow-x: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 13px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+th {
+    background: #f8fafc;
+    color: #374151;
+    font-size: 13px;
+}
+
+td {
+    font-size: 14px;
+}
+
+tr:hover {
+    background: #f8fafc;
+}
+
+/* =========================
+   BADGES
+========================= */
+
+.badge {
+    padding: 5px 9px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.paid {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.pending {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.good {
+    color: #15803d;
+    font-weight: bold;
+}
+
+.warning {
+    color: #ca8a04;
+    font-weight: bold;
+}
+
+.excellent {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.average {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* =========================
+   SUMMARY GRID
+========================= */
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.summary-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.summary-box h3 {
+    color: #172554;
+    margin-bottom: 8px;
+}
+
+.summary-number {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+    padding: 20px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.close:hover {
+    background: #d1d5db;
+}
+
+.student-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.detail-box {
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 7px;
+}
+
+.detail-label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.detail-value {
+    font-weight: bold;
+}
+
+.empty {
+    text-align: center;
+    padding: 30px;
+    color: #6b7280;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 1000px) {
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .sidebar {
+        width: 190px;
+    }
+
+    .main {
+        margin-left: 190px;
+        padding: 15px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 550px) {
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .logo {
+        padding-bottom: 15px;
+    }
+
+    .main {
+        margin-left: 0;
+    }
+
+    .student-details {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        🏫 SchoolMS
+    </div>
+
+    <div class="nav-item active" data-page="dashboard">
+        📊 Dashboard
+    </div>
+
+    <div class="nav-item" data-page="students">
+        👨‍🎓 Students
+    </div>
+
+    <div class="nav-item" data-page="academics">
+        📚 Academics
+    </div>
+
+    <div class="nav-item" data-page="fees">
+        💰 Fees
+    </div>
+
+    <div class="nav-item" data-page="attendance">
+        📅 Attendance
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <div>
+            <h1 id="pageTitle">
+                School Management Dashboard
+            </h1>
+
+            <p id="pageSubtitle">
+                Student Management System
+            </p>
+        </div>
+
+        <div class="storage-status">
+            ● Data stored locally
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         DASHBOARD PAGE
+    ================================================== -->
+
+    <section class="page active" id="dashboard">
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="card-icon">👨‍🎓</div>
+                <div class="card-title">
+                    Total Students
+                </div>
+                <div class="card-value" id="totalStudents">
+                    0
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📅</div>
+                <div class="card-title">
+                    Average Attendance
+                </div>
+                <div class="card-value" id="avgAttendance">
+                    0%
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">💰</div>
+                <div class="card-title">
+                    Fees Paid
+                </div>
+                <div class="card-value" id="feesPaid">
+                    0
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">⚠️</div>
+                <div class="card-title">
+                    Fees Pending
+                </div>
+                <div class="card-value" id="feesPending">
+                    0
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="summary-grid">
+
+            <div class="summary-box">
+                <h3>📚 Average Marks</h3>
+                <div class="summary-number" id="dashboardAverageMarks">
+                    0%
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <h3>🏆 Top Grade</h3>
+                <div class="summary-number">
+                    A+
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <h3>🏫 Active Students</h3>
+                <div class="summary-number" id="activeStudents">
+                    0
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Section</th>
+                        <th>Attendance</th>
+                        <th>Average Marks</th>
+                    </tr>
+                </thead>
+
+                <tbody id="dashboardTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         STUDENTS PAGE
+    ================================================== -->
+
+    <section class="page" id="students">
+
+        <div class="page-header">
+
+            <h2>Students</h2>
+
+            <p>
+                Search and manage all student records.
+            </p>
+
+        </div>
+
+
+        <div class="toolbar">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search name, ID, class or parent..."
+            >
+
+            <select id="classFilter">
+                <option value="">
+                    All Classes
+                </option>
+            </select>
+
+            <select id="sectionFilter">
+
+                <option value="">
+                    All Sections
+                </option>
+
+                <option value="A">
+                    Section A
+                </option>
+
+                <option value="B">
+                    Section B
+                </option>
+
+                <option value="C">
+                    Section C
+                </option>
+
+            </select>
+
+            <button id="generateButton">
+                Generate 100 Students
+            </button>
+
+            <button
+                class="danger"
+                id="clearButton"
+            >
+                Clear Data
+            </button>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Class</th>
+                        <th>Section</th>
+                        <th>Attendance</th>
+                        <th>Average Marks</th>
+                        <th>Fees</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="studentTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         ACADEMICS PAGE
+    ================================================== -->
+
+    <section class="page" id="academics">
+
+        <div class="page-header">
+
+            <h2>Academics</h2>
+
+            <p>
+                Academic performance and subject marks.
+            </p>
+
+        </div>
+
+
+        <div class="summary-grid">
+
+            <div class="summary-box">
+
+                <h3>Average Mathematics</h3>
+
+                <div
+                    class="summary-number"
+                    id="mathAverage"
+                >
+                    0
+                </div>
+
+            </div>
+
+            <div class="summary-box">
+
+                <h3>Average Science</h3>
+
+                <div
+                    class="summary-number"
+                    id="scienceAverage"
+                >
+                    0
+                </div>
+
+            </div>
+
+            <div class="summary-box">
+
+                <h3>Average English</h3>
+
+                <div
+                    class="summary-number"
+                    id="englishAverage"
+                >
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Class</th>
+                        <th>Mathematics</th>
+                        <th>Science</th>
+                        <th>English</th>
+                        <th>Social Science</th>
+                        <th>Average</th>
+                        <th>Grade</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="academicsTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         FEES PAGE
+    ================================================== -->
+
+    <section class="page" id="fees">
+
+        <div class="page-header">
+
+            <h2>Fees Management</h2>
+
+            <p>
+                View student fee payment information.
+            </p>
+
+        </div>
+
+
+        <div class="summary-grid">
+
+            <div class="summary-box">
+
+                <h3>Total Fees</h3>
+
+                <div
+                    class="summary-number"
+                    id="totalFees"
+                >
+                    ₹0
+                </div>
+
+            </div>
+
+            <div class="summary-box">
+
+                <h3>Amount Collected</h3>
+
+                <div
+                    class="summary-number"
+                    id="collectedFees"
+                >
+                    ₹0
+                </div>
+
+            </div>
+
+            <div class="summary-box">
+
+                <h3>Amount Pending</h3>
+
+                <div
+                    class="summary-number"
+                    id="pendingFees"
+                >
+                    ₹0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Annual Fee</th>
+                        <th>Paid</th>
+                        <th>Pending</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="feesTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         ATTENDANCE PAGE
+    ================================================== -->
+
+    <section class="page" id="attendance">
+
+        <div class="page-header">
+
+            <h2>Attendance</h2>
+
+            <p>
+                Monitor student attendance records.
+            </p>
+
+        </div>
+
+
+        <div class="summary-grid">
+
+            <div class="summary-box">
+
+                <h3>Average Attendance</h3>
+
+                <div
+                    class="summary-number"
+                    id="attendanceAverage"
+                >
+                    0%
+                </div>
+
+            </div>
+
+            <div class="summary-box">
+
+                <h3>Above 85%</h3>
+
+                <div
+                    class="summary-number"
+                    id="goodAttendance"
+                >
+                    0
+                </div>
+
+            </div>
+
+            <div class="summary-box">
+
+                <h3>Below 85%</h3>
+
+                <div
+                    class="summary-number"
+                    id="lowAttendance"
+                >
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Section</th>
+                        <th>Attendance</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="attendanceTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =====================================================
+     STUDENT DETAILS MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="studentModal"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>
+                Student Details
+            </h2>
+
+            <button
+                class="close"
+                id="closeModalButton"
+            >
+                Close
+            </button>
+
+        </div>
+
+        <div
+            class="student-details"
+            id="studentDetails"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   SCHOOL MANAGEMENT APPLICATION
+========================================================= */
+
+"use strict";
+
+
+/* =========================================================
+   CONSTANTS
+========================================================= */
+
+const STORAGE_KEY =
+    "school_management_students_v2";
+
+
+/* =========================================================
+   APPLICATION STATE
+========================================================= */
+
+let students = [];
+
+
+/* =========================================================
+   SYNTHETIC DATA
+========================================================= */
+
+const firstNames = [
+    "Aarav",
+    "Aanya",
+    "Aditya",
+    "Ananya",
+    "Arjun",
+    "Diya",
+    "Ishaan",
+    "Isha",
+    "Kabir",
+    "Kavya",
+    "Krishna",
+    "Meera",
+    "Rohan",
+    "Riya",
+    "Rahul",
+    "Saanvi",
+    "Vivaan",
+    "Aditi",
+    "Dev",
+    "Nisha",
+    "Aryan",
+    "Mira",
+    "Yash",
+    "Neha",
+    "Reyansh"
+];
+
+
+const lastNames = [
+    "Sharma",
+    "Patil",
+    "Joshi",
+    "Kulkarni",
+    "Deshmukh",
+    "Mehta",
+    "Gupta",
+    "Verma",
+    "Singh",
+    "Khan",
+    "Shah",
+    "Iyer",
+    "Nair",
+    "Rao",
+    "Chopra"
+];
+
+
+const cities = [
+    "Pune",
+    "Mumbai",
+    "Nashik",
+    "Nagpur",
+    "Aurangabad",
+    "Kolhapur",
+    "Satara",
+    "Thane"
+];
+
+
+const occupations = [
+    "Engineer",
+    "Teacher",
+    "Doctor",
+    "Business Owner",
+    "Accountant",
+    "Manager",
+    "Software Developer",
+    "Consultant"
+];
+
+
+/* =========================================================
+   UTILITY FUNCTIONS
+========================================================= */
+
+function randomItem(array) {
+
+    return array[
+        Math.floor(
+            Math.random() * array.length
+        )
+    ];
+
+}
+
+
+function randomNumber(min, max) {
+
+    return Math.floor(
+        Math.random() * (max - min + 1)
+    ) + min;
+
+}
+
+
+function randomDecimal(min, max) {
+
+    return Number(
+        (
+            Math.random() *
+            (max - min) +
+            min
+        ).toFixed(1)
+    );
+
+}
+
+
+function generatePhone() {
+
+    return "9" +
+        randomNumber(
+            100000000,
+            999999999
+        );
+
+}
+
+
+function formatCurrency(value) {
+
+    return "₹" +
+        Number(value).toLocaleString("en-IN");
+
+}
+
+
+/* =========================================================
+   CREATE STUDENT
+========================================================= */
+
+function createStudent(index) {
+
+    const gender =
+        Math.random() > 0.5
+            ? "Male"
+            : "Female";
+
+    const firstName =
+        randomItem(firstNames);
+
+    const lastName =
+        randomItem(lastNames);
+
+    const classNumber =
+        randomNumber(1, 12);
+
+    const section =
+        randomItem(["A", "B", "C"]);
+
+    const attendance =
+        randomDecimal(72, 99.9);
+
+    const mathematics =
+        randomNumber(45, 100);
+
+    const science =
+        randomNumber(45, 100);
+
+    const english =
+        randomNumber(45, 100);
+
+    const socialScience =
+        randomNumber(45, 100);
+
+    const averageMarks =
+        Number(
+            (
+                (
+                    mathematics +
+                    science +
+                    english +
+                    socialScience
+                ) / 4
+            ).toFixed(1)
+        );
+
+    const feesPaid =
+        Math.random() > 0.2;
+
+    const annualFee =
+        50000;
+
+    const paidAmount =
+        feesPaid
+            ? annualFee
+            : randomNumber(
+                10000,
+                40000
+            );
+
+    const parentName =
+        randomItem(firstNames) +
+        " " +
+        randomItem(lastNames);
+
+    const email =
+        firstName.toLowerCase() +
+        "." +
+        lastName.toLowerCase() +
+        index +
+        "@example.edu";
+
+
+    return {
+
+        id:
+            "STU" +
+            String(index).padStart(
+                4,
+                "0"
+            ),
+
+        firstName:
+
+            firstName,
+
+        lastName:
+
+            lastName,
+
+        fullName:
+
+            firstName +
+            " " +
+            lastName,
+
+        gender:
+
+            gender,
+
+        dateOfBirth:
+
+            randomNumber(
+                2008,
+                2018
+            ) +
+            "-" +
+            String(
+                randomNumber(1, 12)
+            ).padStart(2, "0") +
+            "-" +
+            String(
+                randomNumber(1, 28)
+            ).padStart(2, "0"),
+
+        class:
+
+            classNumber,
+
+        section:
+
+            section,
+
+        rollNumber:
+
+            randomNumber(1, 40),
+
+        attendance:
+
+            attendance,
+
+        subjects: {
+
+            mathematics:
+                mathematics,
+
+            science:
+                science,
+
+            english:
+                english,
+
+            socialScience:
+                socialScience
+        },
+
+        averageMarks:
+
+            averageMarks,
+
+        grade:
+
+            averageMarks >= 90
+                ? "A+"
+                : averageMarks >= 80
+                ? "A"
+                : averageMarks >= 70
+                ? "B+"
+                : averageMarks >= 60
+                ? "B"
+                : averageMarks >= 50
+                ? "C"
+                : "D",
+
+        parent: {
+
+            name:
+                parentName,
+
+            occupation:
+                randomItem(occupations),
+
+            phone:
+                generatePhone()
+        },
+
+        contact: {
+
+            email:
+                email,
+
+            phone:
+                generatePhone()
+        },
+
+        address: {
+
+            city:
+                randomItem(cities),
+
+            state:
+                "Maharashtra",
+
+            country:
+                "India"
+        },
+
+        fees: {
+
+            annualFee:
+                annualFee,
+
+            paid:
+                paidAmount,
+
+            pending:
+                annualFee - paidAmount,
+
+            status:
+                feesPaid
+                    ? "Paid"
+                    : "Pending"
+        },
+
+        admissionYear:
+
+            randomNumber(
+                2020,
+                2026
+            ),
+
+        status:
+
+            Math.random() > 0.05
+                ? "Active"
+                : "Inactive",
+
+        createdAt:
+
+            new Date().toISOString()
+    };
+
+}
+
+
+/* =========================================================
+   GENERATE 100 STUDENTS
+========================================================= */
+
+function generateStudents() {
+
+    students = [];
+
+    for (
+        let i = 1;
+        i <= 100;
+        i++
+    ) {
+
+        students.push(
+            createStudent(i)
+        );
+
+    }
+
+    saveToLocalStorage();
+
+    initializeApplication();
+
+}
+
+
+/* =========================================================
+   LOCAL STORAGE
+========================================================= */
+
+function saveToLocalStorage() {
+
+    try {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(students)
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Local Storage save error:",
+            error
+        );
+
+        alert(
+            "Unable to save data to browser Local Storage."
+        );
+
+    }
+
+}
+
+
+function loadFromLocalStorage() {
+
+    try {
+
+        const savedData =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
+        if (!savedData) {
+
+            generateStudents();
+
+            return;
+        }
+
+        const parsedData =
+            JSON.parse(savedData);
+
+        if (
+            Array.isArray(parsedData) &&
+            parsedData.length > 0
+        ) {
+
+            students =
+                parsedData;
+
+        } else {
+
+            generateStudents();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Local Storage loading error:",
+            error
+        );
+
+        students = [];
+
+        generateStudents();
+
+    }
+
+}
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+const navItems =
+    document.querySelectorAll(
+        ".nav-item"
+    );
+
+
+navItems.forEach(
+    function(navItem) {
+
+        navItem.addEventListener(
+            "click",
+            function() {
+
+                const pageName =
+                    navItem.dataset.page;
+
+                showPage(pageName);
+
+            }
+        );
+
+    }
+);
+
+
+function showPage(pageName) {
+
+    const pages =
+        document.querySelectorAll(
+            ".page"
+        );
+
+    pages.forEach(
+        function(page) {
+
+            page.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    navItems.forEach(
+        function(navItem) {
+
+            navItem.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    const selectedPage =
+        document.getElementById(
+            pageName
+        );
+
+    if (selectedPage) {
+
+        selectedPage.classList.add(
+            "active"
+        );
+
+    }
+
+
+    const selectedNav =
+        document.querySelector(
+            '.nav-item[data-page="' +
+            pageName +
+            '"]'
+        );
+
+    if (selectedNav) {
+
+        selectedNav.classList.add(
+            "active"
+        );
+
+    }
+
+
+    updatePageHeader(
+        pageName
+    );
+
+}
+
+
+/* =========================================================
+   PAGE HEADERS
+========================================================= */
+
+function updatePageHeader(
+    pageName
+) {
+
+    const title =
+        document.getElementById(
+            "pageTitle"
+        );
+
+    const subtitle =
+        document.getElementById(
+            "pageSubtitle"
+        );
+
+
+    const headers = {
+
+        dashboard: [
+            "School Management Dashboard",
+            "Student Management System"
+        ],
+
+        students: [
+            "Students",
+            "Manage student records"
+        ],
+
+        academics: [
+            "Academics",
+            "Student academic performance"
+        ],
+
+        fees: [
+            "Fees Management",
+            "Student fee and payment records"
+        ],
+
+        attendance: [
+            "Attendance",
+            "Student attendance monitoring"
+        ]
+
+    };
+
+
+    if (headers[pageName]) {
+
+        title.textContent =
+            headers[pageName][0];
+
+        subtitle.textContent =
+            headers[pageName][1];
+
+    }
+
+}
+
+
+/* =========================================================
+   CLASS FILTER
+========================================================= */
+
+function populateClassFilter() {
+
+    const filter =
+        document.getElementById(
+            "classFilter"
+        );
+
+    filter.innerHTML =
+        '<option value="">All Classes</option>';
+
+
+    const classes =
+        [
+            ...new Set(
+                students.map(
+                    student =>
+                        student.class
+                )
+            )
+        ].sort(
+            (a, b) =>
+                a - b
+        );
+
+
+    classes.forEach(
+        function(classNumber) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                classNumber;
+
+            option.textContent =
+                "Class " +
+                classNumber;
+
+            filter.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   STUDENT FILTERING
+========================================================= */
+
+function getFilteredStudents() {
+
+    const search =
+        document
+            .getElementById(
+                "searchInput"
+            )
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    const classValue =
+        document
+            .getElementById(
+                "classFilter"
+            )
+            .value;
+
+
+    const sectionValue =
+        document
+            .getElementById(
+                "sectionFilter"
+            )
+            .value;
+
+
+    return students.filter(
+        function(student) {
+
+            const matchesSearch =
+
+                student.fullName
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                student.id
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                String(student.class)
+                    .includes(search)
+
+                ||
+
+                student.parent.name
+                    .toLowerCase()
+                    .includes(search);
+
+
+            const matchesClass =
+
+                !classValue ||
+                String(
+                    student.class
+                ) === classValue;
+
+
+            const matchesSection =
+
+                !sectionValue ||
+                student.section ===
+                sectionValue;
+
+
+            return (
+                matchesSearch &&
+                matchesClass &&
+                matchesSection
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   STUDENT TABLE
+========================================================= */
+
+function renderStudents() {
+
+    const table =
+        document.getElementById(
+            "studentTable"
+        );
+
+
+    const filteredStudents =
+        getFilteredStudents();
+
+
+    if (
+        filteredStudents.length === 0
+    ) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="9" class="empty">
+                    No students found.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    table.innerHTML =
+        filteredStudents.map(
+            function(student) {
+
+                const attendanceClass =
+                    student.attendance >= 85
+                        ? "good"
+                        : "warning";
+
+
+                const feeClass =
+                    student.fees.status ===
+                    "Paid"
+                        ? "paid"
+                        : "pending";
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                ${student.id}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${student.fullName}
+                        </td>
+
+                        <td>
+                            ${student.gender}
+                        </td>
+
+                        <td>
+                            Class ${student.class}
+                        </td>
+
+                        <td>
+                            ${student.section}
+                        </td>
+
+                        <td class="${attendanceClass}">
+                            ${student.attendance}%
+                        </td>
+
+                        <td>
+                            ${student.averageMarks}%
+                        </td>
+
+                        <td>
+                            <span class="badge ${feeClass}">
+                                ${student.fees.status}
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <button
+                                data-student-id="${student.id}"
+                                class="view-student-button"
+                            >
+                                View
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("");
+
+
+    document
+        .querySelectorAll(
+            ".view-student-button"
+        )
+        .forEach(
+            function(button) {
+
+                button.addEventListener(
+                    "click",
+                    function() {
+
+                        viewStudent(
+                            button.dataset.studentId
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function updateDashboard() {
+
+    document.getElementById(
+        "totalStudents"
+    ).textContent =
+        students.length;
+
+
+    if (students.length === 0) {
+
+        document.getElementById(
+            "avgAttendance"
+        ).textContent = "0%";
+
+        document.getElementById(
+            "feesPaid"
+        ).textContent = "0";
+
+        document.getElementById(
+            "feesPending"
+        ).textContent = "0";
+
+        document.getElementById(
+            "dashboardAverageMarks"
+        ).textContent = "0%";
+
+        document.getElementById(
+            "activeStudents"
+        ).textContent = "0";
+
+        return;
+
+    }
+
+
+    const averageAttendance =
+        students.reduce(
+            function(total, student) {
+
+                return total +
+                    Number(
+                        student.attendance
+                    );
+
+            },
+            0
+        ) / students.length;
+
+
+    const averageMarks =
+        students.reduce(
+            function(total, student) {
+
+                return total +
+                    Number(
+                        student.averageMarks
+                    );
+
+            },
+            0
+        ) / students.length;
+
+
+    const paidStudents =
+        students.filter(
+            student =>
+                student.fees.status ===
+                "Paid"
+        ).length;
+
+
+    const pendingStudents =
+        students.filter(
+            student =>
+                student.fees.status ===
+                "Pending"
+        ).length;
+
+
+    const activeStudents =
+        students.filter(
+            student =>
+                student.status ===
+                "Active"
+        ).length;
+
+
+    document.getElementById(
+        "avgAttendance"
+    ).textContent =
+        averageAttendance.toFixed(1) +
+        "%";
+
+
+    document.getElementById(
+        "feesPaid"
+    ).textContent =
+        paidStudents;
+
+
+    document.getElementById(
+        "feesPending"
+    ).textContent =
+        pendingStudents;
+
+
+    document.getElementById(
+        "dashboardAverageMarks"
+    ).textContent =
+        averageMarks.toFixed(1) +
+        "%";
+
+
+    document.getElementById(
+        "activeStudents"
+    ).textContent =
+        activeStudents;
+
+
+    renderDashboardTable();
+
+}
+
+
+/* =========================================================
+   DASHBOARD TABLE
+========================================================= */
+
+function renderDashboardTable() {
+
+    const table =
+        document.getElementById(
+            "dashboardTable"
+        );
+
+
+    const displayStudents =
+        students.slice(0, 10);
+
+
+    if (displayStudents.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="6" class="empty">
+                    No student data available.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    table.innerHTML =
+        displayStudents.map(
+            function(student) {
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            ${student.id}
+                        </td>
+
+                        <td>
+                            ${student.fullName}
+                        </td>
+
+                        <td>
+                            Class ${student.class}
+                        </td>
+
+                        <td>
+                            ${student.section}
+                        </td>
+
+                        <td>
+                            ${student.attendance}%
+                        </td>
+
+                        <td>
+                            ${student.averageMarks}%
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+/* =========================================================
+   ACADEMICS
+========================================================= */
+
+function renderAcademics() {
+
+    const table =
+        document.getElementById(
+            "academicsTable"
+        );
+
+
+    if (students.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="9" class="empty">
+                    No academic data available.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    const mathAverage =
+        students.reduce(
+            (sum, student) =>
+                sum +
+                student.subjects.mathematics,
+            0
+        ) / students.length;
+
+
+    const scienceAverage =
+        students.reduce(
+            (sum, student) =>
+                sum +
+                student.subjects.science,
+            0
+        ) / students.length;
+
+
+    const englishAverage =
+        students.reduce(
+            (sum, student) =>
+                sum +
+                student.subjects.english,
+            0
+        ) / students.length;
+
+
+    document.getElementById(
+        "mathAverage"
+    ).textContent =
+        mathAverage.toFixed(1);
+
+
+    document.getElementById(
+        "scienceAverage"
+    ).textContent =
+        scienceAverage.toFixed(1);
+
+
+    document.getElementById(
+        "englishAverage"
+    ).textContent =
+        englishAverage.toFixed(1);
+
+
+    table.innerHTML =
+        students.map(
+            function(student) {
+
+                const gradeClass =
+                    student.averageMarks >= 80
+                        ? "excellent"
+                        : "average";
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            ${student.id}
+                        </td>
+
+                        <td>
+                            ${student.fullName}
+                        </td>
+
+                        <td>
+                            ${student.class} -
+                            ${student.section}
+                        </td>
+
+                        <td>
+                            ${student.subjects.mathematics}
+                        </td>
+
+                        <td>
+                            ${student.subjects.science}
+                        </td>
+
+                        <td>
+                            ${student.subjects.english}
+                        </td>
+
+                        <td>
+                            ${student.subjects.socialScience}
+                        </td>
+
+                        <td>
+                            ${student.averageMarks}
+                        </td>
+
+                        <td>
+                            <span class="badge ${gradeClass}">
+                                ${student.grade}
+                            </span>
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+/* =========================================================
+   FEES
+========================================================= */
+
+function renderFees() {
+
+    const table =
+        document.getElementById(
+            "feesTable"
+        );
+
+
+    if (students.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">
+                    No fee data available.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    let totalFees = 0;
+    let collectedFees = 0;
+    let pendingFees = 0;
+
+
+    students.forEach(
+        function(student) {
+
+            totalFees +=
+                Number(
+                    student.fees.annualFee
+                );
+
+            collectedFees +=
+                Number(
+                    student.fees.paid
+                );
+
+            pendingFees +=
+                Number(
+                    student.fees.pending
+                );
+
+        }
+    );
+
+
+    document.getElementById(
+        "totalFees"
+    ).textContent =
+        formatCurrency(
+            totalFees
+        );
+
+
+    document.getElementById(
+        "collectedFees"
+    ).textContent =
+        formatCurrency(
+            collectedFees
+        );
+
+
+    document.getElementById(
+        "pendingFees"
+    ).textContent =
+        formatCurrency(
+            pendingFees
+        );
+
+
+    table.innerHTML =
+        students.map(
+            function(student) {
+
+                const feeClass =
+                    student.fees.status ===
+                    "Paid"
+                        ? "paid"
+                        : "pending";
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            ${student.id}
+                        </td>
+
+                        <td>
+                            ${student.fullName}
+                        </td>
+
+                        <td>
+                            Class ${student.class}
+                        </td>
+
+                        <td>
+                            ${formatCurrency(
+                                student.fees.annualFee
+                            )}
+                        </td>
+
+                        <td>
+                            ${formatCurrency(
+                                student.fees.paid
+                            )}
+                        </td>
+
+                        <td>
+                            ${formatCurrency(
+                                student.fees.pending
+                            )}
+                        </td>
+
+                        <td>
+                            <span class="badge ${feeClass}">
+                                ${student.fees.status}
+                            </span>
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+/* =========================================================
+   ATTENDANCE
+========================================================= */
+
+function renderAttendance() {
+
+    const table =
+        document.getElementById(
+            "attendanceTable"
+        );
+
+
+    if (students.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="6" class="empty">
+                    No attendance data available.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    const averageAttendance =
+        students.reduce(
+            (sum, student) =>
+                sum +
+                Number(
+                    student.attendance
+                ),
+            0
+        ) / students.length;
+
+
+    const goodAttendance =
+        students.filter(
+            student =>
+                Number(
+                    student.attendance
+                ) >= 85
+        ).length;
+
+
+    const lowAttendance =
+        students.length -
+        goodAttendance;
+
+
+    document.getElementById(
+        "attendanceAverage"
+    ).textContent =
+        averageAttendance.toFixed(1) +
+        "%";
+
+
+    document.getElementById(
+        "goodAttendance"
+    ).textContent =
+        goodAttendance;
+
+
+    document.getElementById(
+        "lowAttendance"
+    ).textContent =
+        lowAttendance;
+
+
+    table.innerHTML =
+        students.map(
+            function(student) {
+
+                const isGood =
+                    Number(
+                        student.attendance
+                    ) >= 85;
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            ${student.id}
+                        </td>
+
+                        <td>
+                            ${student.fullName}
+                        </td>
+
+                        <td>
+                            Class ${student.class}
+                        </td>
+
+                        <td>
+                            ${student.section}
+                        </td>
+
+                        <td class="${
+                            isGood
+                                ? "good"
+                                : "warning"
+                        }">
+                            ${student.attendance}%
+                        </td>
+
+                        <td>
+
+                            <span class="badge ${
+                                isGood
+                                    ? "paid"
+                                    : "pending"
+                            }">
+
+                                ${
+                                    isGood
+                                        ? "Good"
+                                        : "Needs Attention"
+                                }
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+/* =========================================================
+   STUDENT DETAILS MODAL
+========================================================= */
+
+function viewStudent(studentId) {
+
+    const student =
+        students.find(
+            function(item) {
+
+                return item.id ===
+                    studentId;
+
+            }
+        );
+
+
+    if (!student) {
+
+        return;
+
+    }
+
+
+    const details =
+        document.getElementById(
+            "studentDetails"
+        );
+
+
+    details.innerHTML = `
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Student ID
+            </div>
+            <div class="detail-value">
+                ${student.id}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Name
+            </div>
+            <div class="detail-value">
+                ${student.fullName}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Gender
+            </div>
+            <div class="detail-value">
+                ${student.gender}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Date of Birth
+            </div>
+            <div class="detail-value">
+                ${student.dateOfBirth}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Class / Section
+            </div>
+            <div class="detail-value">
+                ${student.class} -
+                ${student.section}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Roll Number
+            </div>
+            <div class="detail-value">
+                ${student.rollNumber}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Attendance
+            </div>
+            <div class="detail-value">
+                ${student.attendance}%
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Average Marks
+            </div>
+            <div class="detail-value">
+                ${student.averageMarks}%
+                (${student.grade})
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Mathematics
+            </div>
+            <div class="detail-value">
+                ${student.subjects.mathematics}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Science
+            </div>
+            <div class="detail-value">
+                ${student.subjects.science}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                English
+            </div>
+            <div class="detail-value">
+                ${student.subjects.english}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Social Science
+            </div>
+            <div class="detail-value">
+                ${student.subjects.socialScience}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Parent / Guardian
+            </div>
+            <div class="detail-value">
+                ${student.parent.name}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Parent Occupation
+            </div>
+            <div class="detail-value">
+                ${student.parent.occupation}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Parent Phone
+            </div>
+            <div class="detail-value">
+                ${student.parent.phone}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Student Email
+            </div>
+            <div class="detail-value">
+                ${student.contact.email}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                City
+            </div>
+            <div class="detail-value">
+                ${student.address.city}
+            </div>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-label">
+                Fees
+            </div>
+            <div class="detail-value">
+                ${formatCurrency(
+                    student.fees.paid
+                )}
+                /
+                ${formatCurrency(
+                    student.fees.annualFee
+                )}
+            </div>
+        </div>
+
+    `;
+
+
+    document
+        .getElementById(
+            "studentModal"
+        )
+        .classList.add("show");
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeModal() {
+
+    document
+        .getElementById(
+            "studentModal"
+        )
+        .classList.remove("show");
+
+}
+
+
+document
+    .getElementById(
+        "closeModalButton"
+    )
+    .addEventListener(
+        "click",
+        closeModal
+    );
+
+
+window.addEventListener(
+    "click",
+    function(event) {
+
+        const modal =
+            document.getElementById(
+                "studentModal"
+            );
+
+        if (
+            event.target === modal
+        ) {
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   GENERATE NEW DATA BUTTON
+========================================================= */
+
+document
+    .getElementById(
+        "generateButton"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            const confirmation =
+                confirm(
+                    "Generate a new set of 100 synthetic students? " +
+                    "Existing data will be replaced."
+                );
+
+
+            if (confirmation) {
+
+                generateStudents();
+
+                alert(
+                    "100 new synthetic students generated successfully."
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   CLEAR DATA BUTTON
+========================================================= */
+
+document
+    .getElementById(
+        "clearButton"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            const confirmation =
+                confirm(
+                    "Delete all school data from this browser?"
+                );
+
+
+            if (!confirmation) {
+
+                return;
+
+            }
+
+
+            localStorage.removeItem(
+                STORAGE_KEY
+            );
+
+            students = [];
+
+            initializeApplication();
+
+            alert(
+                "All local school data has been cleared."
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   SEARCH / FILTER EVENTS
+========================================================= */
+
+document
+    .getElementById(
+        "searchInput"
+    )
+    .addEventListener(
+        "input",
+        renderStudents
+    );
+
+
+document
+    .getElementById(
+        "classFilter"
+    )
+    .addEventListener(
+        "change",
+        renderStudents
+    );
+
+
+document
+    .getElementById(
+        "sectionFilter"
+    ).addEventListener(
+        "change",
+        renderStudents
+    );
+
+
+/* =========================================================
+   INITIALIZE ALL VIEWS
+========================================================= */
+
+function initializeApplication() {
+
+    populateClassFilter();
+
+    renderStudents();
+
+    updateDashboard();
+
+    renderAcademics();
+
+    renderFees();
+
+    renderAttendance();
+
+}
+
+
+/* =========================================================
+   APPLICATION START
+========================================================= */
+
+loadFromLocalStorage();
+
+</script>
+
+</body>
+</html>
+
